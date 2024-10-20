@@ -19,7 +19,7 @@ class UserResource extends JsonResource
         ];
 
         if ($this->name !== $this->old_name) {
-            $data['name'] = $this->name;
+            $data['firstname'] = $this->name;
         }
 
         if ($this->lastname !== $this->old_lastname) {
