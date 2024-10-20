@@ -109,4 +109,9 @@ return [
         'table' => 'failed_jobs',
     ],
 
+    // Batch size limit of the API per request
+    'api_request_limit_batch' => 1000,
+    // Hourly limit of the API requests
+    'api_request_limit_hour' => 50,
+
 ];

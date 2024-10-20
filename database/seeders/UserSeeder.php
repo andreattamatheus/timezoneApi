@@ -35,5 +35,7 @@ class UserSeeder extends Seeder
                 'timezone_id' => $user['timezone_id'],
             ]);
         }
+
+        User::factory()->count(20)->create();
     }
 }
