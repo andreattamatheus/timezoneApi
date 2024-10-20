@@ -27,7 +27,7 @@ class UserResource extends JsonResource
         }
 
         if ($this->timezone->id !== $this->old_timezone) {
-            $data['timezone'] = $this->timezone->description;
+            $data['time_zone'] = $this->timezone->description;
         }
 
         return $data;
