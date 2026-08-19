@@ -1,94 +1,62 @@
-# Test Project
+# Timezone API
+
+A Laravel-based service that keeps user attributes (name, last name, timezone) synced with a third-party provider whenever they change, respecting the provider's rate limits.
 
 ## Overview
 
-This project is a Laravel-based that update users with some information (name, lastname or timezone) is changed.
-It's a hourly schedule, that has some API limitaton:
+The provider API allows up to 50 requests/hour for batch endpoints (up to 1,000 records each, so 50,000 updates/hour) and 3,600 individual requests/hour for other endpoints. This project only calls the API for users whose attributes actually changed — roughly 40,000 calls/hour at peak — via a scheduled job.
 
-We use a third-party API that has the following limits: You can make up to 50 requests per hour for batch endpoints and 3,600 individual requests per hour for other API endpoints. Each batch request accommodates up to 1,000 records in the payload for a total of 50,000 updates per hour.
+## Tech Stack
 
-We want to keep the user attributes up to date with the provider. We only need to make calls for the user whose attributes are changing. This is about 40000 calls per hour.
+- PHP 8.1+, Laravel
+- MySQL
+- Laravel queues & scheduler
 
-## Table of Contents
+## Prerequisites
 
--   [Requirements](#requirements)
--   [Installation](#installation)
--   [Configuration](#configuration)
--   [Running the Application](#running-the-application)
--   [API Endpoints](#api-endpoints)
--   [Authentication](#authentication)
-
-## Requirements
-
--   PHP 8.1 or higher
--   Composer
--   MySQL
+- PHP 8.1+
+- Composer
+- MySQL
 
 ## Installation
 
-**Clone the Repository**
-
-```bash
+```sh
 git clone https://github.com/andreattamatheus/timezoneApi
-cd your-project
-```
-
-## Project API
-
-Copy the .env-example and rename it to .env
-
-Inside the .env file, you must filled the correct info about your DB.
-
--   DB_HOST=127.0.0.1
--   DB_PORT=3306
--   DB_DATABASE=YOUR_DATABASE
--   DB_USERNAME=YOUR_USERNAME
--   DB_PASSWORD=YOUR_PASSWORD
-
-```
+cd timezoneApi
 composer install
 ```
 
+Copy `.env.example` to `.env` and fill in your database credentials:
+
 ```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=YOUR_DATABASE
+DB_USERNAME=YOUR_USERNAME
+DB_PASSWORD=YOUR_PASSWORD
+```
+
+```sh
 php artisan optimize
-```
-
-```
 php artisan migrate:fresh --seed
-```
-
-```
 php artisan serve
 ```
 
-### Pint
+## Background Jobs
 
-```
- ./vendor/bin/pint
-```
-
-### Run job
-
-Then run:
-
-```
-php artisan queue:listen
+```sh
+php artisan queue:listen         # process queued jobs
+php artisan schedule:list        # list scheduled jobs
+php artisan app:process-users    # run the user-sync command manually
+php artisan schedule:run         # run the schedule routine
 ```
 
-You can check the schedules tasks:
+## Quality
 
-```
-php artisan schedule:list
-```
-
-If you want to run the command to parse the content, you can try:
-
-```
-php artisan app:process-users
+```sh
+./vendor/bin/pint
 ```
 
-To runt he schedule routine
+## Contact
 
-```
-php artisan schedule:run
-```
+Matheus Andreatta — [@andreattamatheus](https://github.com/andreattamatheus)
